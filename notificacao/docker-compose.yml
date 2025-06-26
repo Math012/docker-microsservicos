@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  notificacao-service:
+    build: .
+    container_name: notificacao-service
+    ports:
+      - "8082:8082"
+    networks:
+      - minha-rede
+
+networks:
+  minha-rede:
+    external: true
