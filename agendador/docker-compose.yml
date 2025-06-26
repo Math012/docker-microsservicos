@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1998
+      MONGO_INITDB_DATABASE: db_agendador_tarefas
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - minha-rede
+
+  agendador-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agendador-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://root:1998@mongodb:27017/db_agendador_tarefas?authSource=admin
+    networks:
+      - minha-rede
+
+volumes:
+  mongo_data:
+
+networks:
+  minha-rede:
+    external: true
