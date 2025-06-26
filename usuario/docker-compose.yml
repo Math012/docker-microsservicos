@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_DB: db_projeto
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1998
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - minha-rede
+
+  app:
+    build: .
+    container_name: usuario-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db_projeto
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1998
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+    networks:
+      - minha-rede
+
+volumes:
+  postgres_data:
+
+networks:
+  minha-rede:
+    external: true
